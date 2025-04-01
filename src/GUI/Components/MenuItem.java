@@ -2,11 +2,12 @@ package GUI.Components;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class MenuItem extends JButton {
-    private boolean isExpanded = false; // Kiểm tra trạng thái mở rộng
+    private boolean isExpanded = false;
 
     public MenuItem(String name, int index, boolean hasSubmenu, Runnable toggleAction) {
         super(name);
@@ -18,12 +19,10 @@ public class MenuItem extends JButton {
         setBackground(new Color(230, 230, 230));
         setOpaque(true);
 
-        // Nếu có submenu thì sẽ thụt lề, nếu không sẽ không thụt lề
         if (hasSubmenu) {
             setBackground(new Color(220, 220, 220));
         }
 
-        // Hover effect
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
@@ -34,13 +33,13 @@ public class MenuItem extends JButton {
             public void mouseExited(MouseEvent e) {
                 setBackground(new Color(230, 230, 230));
             }
+        });
 
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (hasSubmenu) {
-                    isExpanded = !isExpanded; // Đảo trạng thái
-                    toggleAction.run(); // Gọi hành động ẩn/hiện submenu
-                }
+        // Bổ sung ActionListener để có thể gọi addActionListener
+        addActionListener(e -> {
+            if (hasSubmenu) {
+                isExpanded = !isExpanded;
+                toggleAction.run();
             }
         });
     }

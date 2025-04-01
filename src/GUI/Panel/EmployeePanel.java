@@ -206,45 +206,64 @@ public class EmployeePanel extends JPanel {
     public void openAddEmployeeDialog() {
         // Chỉnh sửa dialog thêm nhân viên
         JDialog dialog = new JDialog((Frame) SwingUtilities.getWindowAncestor(this), "Thêm Nhân Viên", true);
-        dialog.setSize(500, 350);
+        dialog.setSize(520, 400);
         dialog.setLayout(new GridBagLayout());
         dialog.setLocationRelativeTo(null);
         dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(5, 5, 5, 5);
+        gbc.insets = new Insets(8, 10, 8, 10); // Tăng khoảng cách giữa các thành phần
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.weightx = 1;
-        
+    
         // ===== Labels và Input Fields =====
         String[] labels = {"Họ và Tên:", "Email:", "Giới tính:", "Chức vụ:", "Số điện thoại:", "Ngày sinh:", "Địa chỉ:"};
-        JTextField txtName = new JTextField(15);
-        JTextField txtEmail = new JTextField(15);
+        
+        JTextField txtName = new JTextField(18);
+        JTextField txtEmail = new JTextField(18);
         JComboBox<String> cbGender = new JComboBox<>(new String[]{"Nam", "Nữ"});
-        JTextField txtPosition = new JTextField(15);
-        JTextField txtPhone = new JTextField(15);
+        JTextField txtPosition = new JTextField(18);
+        JTextField txtPhone = new JTextField(18);
+        
         JDateChooser dateChooser = new JDateChooser();
         dateChooser.setDateFormatString("dd/MM/yyyy");
-        JTextField txtAddress = new JTextField(15);
         
+        JTextField txtAddress = new JTextField(18);
+    
         JComponent[] components = {txtName, txtEmail, cbGender, txtPosition, txtPhone, dateChooser, txtAddress};
         
         for (int i = 0; i < labels.length; i++) {
             gbc.gridx = 0; gbc.gridy = i;
             gbc.anchor = GridBagConstraints.LINE_END;
-            dialog.add(new JLabel(labels[i]), gbc);
-
+            JLabel label = new JLabel(labels[i]);
+            label.setFont(new Font("Arial", Font.BOLD, 13)); // Chỉnh font chữ đậm
+            dialog.add(label, gbc);
+    
             gbc.gridx = 1; gbc.anchor = GridBagConstraints.LINE_START;
+            if (components[i] instanceof JTextField) {
+                ((JTextField) components[i]).setPreferredSize(new Dimension(200, 30)); // Chỉnh kích thước input
+                ((JTextField) components[i]).setBorder(BorderFactory.createLineBorder(Color.GRAY, 1)); // Viền input
+            } else if (components[i] instanceof JComboBox) {
+                components[i].setPreferredSize(new Dimension(210, 30));
+            } else if (components[i] instanceof JDateChooser) {
+                components[i].setPreferredSize(new Dimension(210, 30));
+            }
             dialog.add(components[i], gbc);
         }
-
+    
         // ===== Nút Lưu =====
-        JButton btnSave = new JButton("Lưu");
+        JButton btnSave = new JButton("✔ Lưu");
+        btnSave.setFont(new Font("Arial", Font.BOLD, 14));
+        btnSave.setBackground(new Color(50, 150, 250)); // Màu xanh đẹp hơn
+        btnSave.setForeground(Color.WHITE);
+        btnSave.setFocusPainted(false);
+        btnSave.setPreferredSize(new Dimension(120, 35));
+        
         gbc.gridx = 0; gbc.gridy = labels.length;
         gbc.gridwidth = 2;
         gbc.anchor = GridBagConstraints.CENTER;
         dialog.add(btnSave, gbc);
-
+    
         // ===== Xử lý sự kiện Lưu =====
         btnSave.addActionListener(e -> {
             String name = txtName.getText();
@@ -254,7 +273,7 @@ public class EmployeePanel extends JPanel {
             String phone = txtPhone.getText();
             String address = txtAddress.getText();
             String birthDate = ((JTextField) dateChooser.getDateEditor().getUiComponent()).getText();
-
+    
             if (name.isEmpty() || email.isEmpty() || position.isEmpty() || phone.isEmpty() || address.isEmpty() || birthDate.isEmpty()) {
                 JOptionPane.showMessageDialog(dialog, "Vui lòng nhập đầy đủ thông tin!", "Lỗi", JOptionPane.ERROR_MESSAGE);
             } else {
@@ -262,7 +281,8 @@ public class EmployeePanel extends JPanel {
                 dialog.dispose(); // Đóng form
             }
         });
-
+    
         dialog.setVisible(true);
     }
+    
 }

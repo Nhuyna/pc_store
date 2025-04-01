@@ -9,13 +9,16 @@ import java.util.List;
 import java.util.Map;
 
 import javax.swing.*;
+
+import GUI.Main;
+import GUI.Panel.EmployeePanel;
+import GUI.Panel.Trangchu;
 import net.miginfocom.swing.MigLayout;
 
 public class MenuLeft extends JPanel {
     private MigLayout layout;
-
-    // Lưu danh sách submenu cho mỗi mục menu
     private Map<Integer, List<JComponent>> menuSubmenus = new HashMap<>();
+    private Main mainFrame; // Tham chiếu tới Main
 
     String[][] menuItems = {
         {"Trang chủ"},
@@ -32,13 +35,13 @@ public class MenuLeft extends JPanel {
         {"Đăng xuất"},
     };
 
-    public MenuLeft() {
+    public MenuLeft(Main main) {
+        this.mainFrame = main; // Lưu tham chiếu
         initComponents();
     }
 
     private void initComponents() {
         layout = new MigLayout("wrap 1, fillx, gapy 0px, inset 0px");
-
         setLayout(layout);
 
         for (int i = 0; i < menuItems.length; i++) {
@@ -49,45 +52,77 @@ public class MenuLeft extends JPanel {
     private void addMenu(String menuName, int index) {
         int length = menuItems[index].length;
     
-        // Toggle action để ẩn/hiện submenu
         Runnable toggleAction = () -> toggleSubMenu(index);
     
         MenuItem item = new MenuItem(menuName, index, length > 1, toggleAction);
+        item.addActionListener(e -> handleMenuClick(index, menuName)); // Gán sự kiện click
         add(item, "growx");
     
         List<JComponent> subMenuList = new ArrayList<>();
     
         if (length > 1) {
-            // Duyệt qua các submenu
             for (int j = 1; j < length; j++) {
-                MenuItem subItem = new MenuItem("  └ " + menuItems[index][j], index, false, null);
-                subItem.setVisible(false); // Ban đầu ẩn đi
+                // Lưu giá trị j vào một biến final để sử dụng trong lambda
+                final String subMenuText = "  └ " + menuItems[index][j];
+                
+                MenuItem subItem = new MenuItem(subMenuText, index, false, null);
+                subItem.setVisible(false);
+        
+                // Sử dụng biến final subMenuText trong action listener
+                subItem.addActionListener(e -> handleMenuClick(index, subMenuText));
+        
                 subMenuList.add(subItem);
-                add(subItem, "growx, hidemode 3"); // Sử dụng hidemode 3 để ẩn hoàn toàn
+                add(subItem, "growx, hidemode 3");
             }
-            
-        } else {
-            // Nếu không có submenu, không thêm khoảng cách thụt lề
-            add(item, "growx");
         }
-    
-        // Lưu submenu vào Map theo index
+        
+
         menuSubmenus.put(index, subMenuList);
-    
         revalidate();
         repaint();
     }
     
     private void toggleSubMenu(int index) {
-        // Lấy danh sách submenu của mục menu hiện tại
         List<JComponent> subMenuList = menuSubmenus.get(index);
-
-        // Đảo trạng thái của các submenu của mục này
         for (JComponent subMenu : subMenuList) {
-            subMenu.setVisible(!subMenu.isVisible()); // Đảo trạng thái submenu
+            subMenu.setVisible(!subMenu.isVisible());
         }
-
         revalidate();
         repaint();
     }
-}  
+
+    // Xử lý sự kiện khi click menu
+    private void handleMenuClick(int index, String menuName) {
+        switch (menuName) {
+            case "Trang chủ":
+                mainFrame.setMainPanel(new Trangchu());
+                break;
+            case "Sản phẩm":
+            case "Laptop":
+            case "PC":
+            // case "Linh kiện máy tính":
+            //     mainFrame.setMainPanel(new ProductPanel()); // Tạo class ProductPanel để hiển thị danh sách sản phẩm
+                break;
+            case "Nhân viên":
+            mainFrame.setMainPanel(new EmployeePanel());
+            break;
+            case "Quản lí":
+            // case "Bán hàng":
+            //     mainFrame.setMainPanel(new EmployeePanel());
+            //     break;
+            // case "Khách hàng":
+            //     mainFrame.setMainPanel(new CustomerPanel());
+            //     break;
+            // case "Thống kê":
+            //     mainFrame.setMainPanel(new StatisticsPanel());
+            //     break;
+            case "Đăng xuất":
+                JOptionPane.showMessageDialog(mainFrame, "Đăng xuất thành công!");
+                System.exit(0);
+                break;
+            default:
+                JOptionPane.showMessageDialog(mainFrame, "Chức năng đang phát triển!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+                break;
+        }
+    }
+}
