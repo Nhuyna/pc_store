@@ -13,7 +13,7 @@ public class Employee {
     private String homeAddress;       // Địa chỉ nhà
 
     public Employee(int id, String name, String position, double salary,
-                    String phoneNumber, String email, LocalDate dateOfJoining, String homeAddress) {
+                    String phoneNumber, String email, LocalDate dateOfJoining) {
         this.id = id;
         this.name = name;
         this.position = position;
@@ -21,9 +21,20 @@ public class Employee {
         this.phoneNumber = phoneNumber;
         this.email = email;
         this.dateOfJoining = dateOfJoining;
-        this.homeAddress = homeAddress;
+
     }
 
+        public Employee( String name, String position, double salary,
+        String phoneNumber, String email, LocalDate dateOfJoining) {
+
+    this.name = name;
+    this.position = position;
+    this.salary = salary;
+    this.phoneNumber = phoneNumber;
+    this.email = email;
+    this.dateOfJoining = dateOfJoining;
+
+}
     // Getters & Setters
     public int getId() {
         return id;

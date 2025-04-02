@@ -15,21 +15,22 @@ public class EmployeeActionListener implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         String command = e.getActionCommand();
+  
         switch (command) {
             case "Thêm":
                 panel.openAddEmployeeDialog();
                 break;
             case "Sửa":
-                panel.deleteEmployee();
+                panel.openEditEmployeeDialog();
                 break;
             case "Xóa":
-                panel.deleteEmployee();
+                System.out.println("XOá");
                 break;
             case "Tìm":
-                panel.searchEmployee();
+                System.out.println("Tìm");
                 break;
             case "Xuất Excel":
-                panel.ExportExcel();
+                System.out.println("Excel");
                 break;
         }
     }

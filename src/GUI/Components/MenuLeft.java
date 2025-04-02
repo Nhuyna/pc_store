@@ -13,6 +13,7 @@ import javax.swing.*;
 import GUI.Main;
 import GUI.Panel.EmployeePanel;
 import GUI.Panel.Trangchu;
+import GUI.Components.MenuChucNang;
 import net.miginfocom.swing.MigLayout;
 
 public class MenuLeft extends JPanel {
@@ -68,7 +69,6 @@ public class MenuLeft extends JPanel {
                 MenuItem subItem = new MenuItem(subMenuText, index, false, null);
                 subItem.setVisible(false);
         
-                // Sử dụng biến final subMenuText trong action listener
                 subItem.addActionListener(e -> handleMenuClick(index, subMenuText));
         
                 subMenuList.add(subItem);
