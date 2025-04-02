@@ -19,8 +19,8 @@ public class ThemNhanVien {
         this.employeeBUS = bus;
     }
 
-    public void FormThemNv() {
-        JDialog dialog = new JDialog((Frame) null, "Thêm Nhân Viên", true);
+    public void FormThemNv(String formname, String textButton) {
+        JDialog dialog = new JDialog((Frame) null, formname, true);
         dialog.setSize(520, 550);  // Tăng kích thước dialog để chứa thêm trường Lương
         dialog.setLayout(new GridBagLayout());
         dialog.setLocationRelativeTo(null);
@@ -127,4 +127,8 @@ public class ThemNhanVien {
         }
     }
     
+
+    public void openEditEmployeeDialog(){
+
+    }
 }

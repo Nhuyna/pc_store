@@ -20,8 +20,7 @@ public class EmployeeBUS {
         if (!employee.getEmail().contains("@")) {
             return false; // Email không hợp lệ
         }
-    
-        // Kiểm tra nếu ngày sinh tồn tại trong Employee và chuyển đổi
+
         LocalDate birthDate = employee.getDateOfJoining(); // Giả sử ngày sinh được lưu trong dateOfJoining
     
         if (birthDate == null) {
@@ -45,7 +44,7 @@ public class EmployeeBUS {
     
     // Phương thức chỉnh sửa thông tin nhân viên (ví dụ)
     public boolean updateEmployee(Employee employee) {
-        // Logic cập nhật nhân viên
+       
         return employeeDAO.updateEmployee(employee);
     }
 

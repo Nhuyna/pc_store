@@ -21,6 +21,8 @@ public class EmployeeActionListener implements ActionListener {
                 panel.openAddEmployeeDialog();
                 break;
             case "Sửa":
+            // Kiem tra xem ng dung co dang click thog tin nao kh
+            
                 panel.openEditEmployeeDialog();
                 break;
             case "Xóa":

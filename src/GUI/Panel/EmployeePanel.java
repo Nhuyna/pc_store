@@ -119,7 +119,13 @@ public class EmployeePanel extends JPanel {
     public void openAddEmployeeDialog() {
         EmployeeBUS employeeBUS = new EmployeeBUS(new EmployeeDAO());
         ThemNhanVien nvmoi = new ThemNhanVien(employeeBUS);
-        nvmoi.FormThemNv();
+        nvmoi.FormThemNv("Thêm nhân viên","Thêm");
+    }
+
+    public void openEditEmployeeDialog() {
+        EmployeeBUS employeeBUS = new EmployeeBUS(new EmployeeDAO());
+        ThemNhanVien nvmoi = new ThemNhanVien(employeeBUS);
+        nvmoi.FormThemNv("Chỉnh sửa thông tin nhân viên","Cập nhật");
     }
 
     private void printSelectedEmployee(int selectedRow) {
@@ -152,24 +158,22 @@ public class EmployeePanel extends JPanel {
         System.out.println("Địa chỉ: " + address);
     }
 
-    private void addTableSelectionListener() {
-        // employeeTable.setRowSelectionAllowed(true);
-        // employeeTable.setCellSelectionEnabled(false);
-        // employeeTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+    private int addTableSelectionListener() {
+        final int[] selectedId = {-1}; // Dùng mảng để lưu giá trị có thể thay đổi được
     
-        // Lắng nghe sự kiện chọn dòng
         employeeTable.getSelectionModel().addListSelectionListener(e -> {
             if (!e.getValueIsAdjusting()) {
                 int selectedRow = employeeTable.getSelectedRow();
                 if (selectedRow != -1) {
-                    printSelectedEmployee(selectedRow);
-                    
+                    selectedId[0] = (int) tableModel.getValueAt(selectedRow, 0);
+                    System.out.println(selectedId[0]);
                 }
             }
         });
     
-
+        return selectedId[0]; // Lưu ý: giá trị này sẽ luôn là -1 ban đầu
     }
+    
 
 
 }
