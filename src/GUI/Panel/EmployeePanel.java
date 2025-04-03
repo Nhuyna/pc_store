@@ -18,7 +18,7 @@ public class EmployeePanel extends JPanel {
     private DefaultTableModel tableModel;
     private List<Employee> employees;
     private EmployeeBUS employeeBUS;
-    private int selectedEmployeeId = -1; 
+    private String selectedEmployeeId = "-1"; 
 
     public EmployeePanel() {
         this.employeeBUS = new EmployeeBUS(new EmployeeDAO());
@@ -119,7 +119,7 @@ public class EmployeePanel extends JPanel {
         nvmoi.FormThemNv("Thêm nhân viên","Thêm",null);
     }
 
-    public void openEditEmployeeDialog(int id) {
+    public void openEditEmployeeDialog(String id) {
         ThemNhanVien nvmoi = new ThemNhanVien(employeeBUS, this);
         EmployeeDAO employeeDAO = new EmployeeDAO();
         Employee employee = employeeDAO.getEmployeeById(id);
@@ -158,14 +158,15 @@ public class EmployeePanel extends JPanel {
         employeeTable.getSelectionModel().addListSelectionListener(e -> {
             if (!e.getValueIsAdjusting()) {
                 int selectedRow = employeeTable.getSelectedRow();
-                if (selectedRow != -1) {                    selectedEmployeeId = (int) tableModel.getValueAt(selectedRow, 0);
+                if (selectedRow != -1) {          
+                              selectedEmployeeId = (String) tableModel.getValueAt(selectedRow, 0);
                 }
             }
         });
     }
     
     // Trả về ID của nhân viên đã chọn
-    public int getSelectedEmployeeId() {
+    public String getSelectedEmployeeId() {
         return selectedEmployeeId;
     }
     

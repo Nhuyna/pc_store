@@ -24,7 +24,7 @@ public class EmployeeDAO {
              ResultSet rs = stmt.executeQuery(sql)) {
     
             while (rs.next()) {
-                int id = rs.getInt("IDNhanVien");
+                String id = rs.getString("IDNhanVien");
                 String name = rs.getString("TenNhanVien");
                 String position = rs.getString("ViTri");
                 double salary = rs.getDouble("Luong");
@@ -42,16 +42,17 @@ public class EmployeeDAO {
         }
         return employees;
     }
-    public Employee getEmployeeById(int id) {
+    public Employee getEmployeeById(String id) {
         Employee employee = null;
         String sql = "SELECT * FROM nhanvien WHERE IDNhanVien = ?"; // Truy vấn theo ID nhân viên
         
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, id);  // Đặt giá trị ID cho câu lệnh SQL
+            ps.setString(1, id);  // Đặt giá trị ID cho câu lệnh SQL
             
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     // Lấy thông tin nhân viên từ kết quả truy vấn
+                    
                     String name = rs.getString("TenNhanVien");
                     String position = rs.getString("ViTri");
                     double salary = rs.getDouble("Luong");
@@ -73,14 +74,15 @@ public class EmployeeDAO {
     // Thêm nhân viên
     public boolean addEmployee(Employee emp) {
         // Câu lệnh SQL để thêm nhân viên, loại bỏ trường "Lương"
-        String sql = "INSERT INTO nhanvien (TenNhanVien, ViTri, SDT, Mail, NgayVaoLam) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO nhanvien (IDNhanVien,TenNhanVien, ViTri, SDT, Mail, NgayVaoLam) VALUES (?,?, ?, ?, ?, ?)";
         
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, emp.getName());               // TenNhanVien
-            ps.setString(2, emp.getPosition());           // ViTri
-            ps.setString(3, emp.getPhoneNumber());        // SDT
-            ps.setString(4, emp.getEmail());              // Mail
-            ps.setDate(5, Date.valueOf(emp.getDateOfJoining())); // NgayVaoLam
+            ps.setString(1, emp.getId());  
+            ps.setString(2, emp.getName());               // TenNhanVien
+            ps.setString(3, emp.getPosition());           // ViTri
+            ps.setString(4, emp.getPhoneNumber());        // SDT
+            ps.setString(5, emp.getEmail());              // Mail
+            ps.setDate(6, Date.valueOf(emp.getDateOfJoining())); // NgayVaoLam
     
             // Thực thi câu lệnh và kiểm tra kết quả
             return ps.executeUpdate() > 0;
@@ -104,7 +106,7 @@ public class EmployeeDAO {
             ps.setString(3, emp.getPhoneNumber());        // SDT
             ps.setString(4, emp.getEmail());              // Mail
             ps.setDate(5, Date.valueOf(emp.getDateOfJoining())); // NgayVaoLam
-            ps.setInt(6, emp.getId());                    // id của nhân viên cần sửa
+            ps.setString(6, emp.getId());                    // id của nhân viên cần sửa
     
             // Thực thi câu lệnh và kiểm tra kết quả
             return ps.executeUpdate() > 0;

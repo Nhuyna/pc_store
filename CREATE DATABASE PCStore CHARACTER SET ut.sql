@@ -94,10 +94,16 @@ CREATE TABLE IF NOT EXISTS CauHinhPC (
 CREATE TABLE IF NOT EXISTS PhanLoaiSP (
     idPhanLoai INT PRIMARY KEY,  -- idPhanLoai là khóa chính
     idSanPham VARCHAR(20),
-    STTPL INT DEFAULT 0,         -- Giả sử STTPL mặc định là 0
-    Gia DECIMAL(12,2),           -- Chỉnh DECIMAL(12,2) để hỗ trợ giá lớn hơn
-    soLuongTonKho INT DEFAULT 0, -- Thêm cột theo dõi tồn kho với giá trị mặc định là 0
+    STTPL INT DEFAULT 0,         -- Trạng thái phân loại sản phẩm
+    Gia DECIMAL(12,2),           -- Giá sản phẩm
+    soLuongTonKho INT DEFAULT 0, -- Số lượng tồn kho
     FOREIGN KEY (idSanPham) REFERENCES SanPham(idSanPham)
+);
+
+CREATE TABLE IF NOT EXISTS ChiTietSP (
+    SerialNumber VARCHAR(50) PRIMARY KEY,  -- SerialNumber là khóa chính
+    idPhanLoai INT,                        -- Liên kết với PhanLoaiSP
+    FOREIGN KEY (idPhanLoai) REFERENCES PhanLoaiSP(idPhanLoai) -- Khóa ngoại
 );
 
 -- Create KhuyenMai table
@@ -119,20 +125,19 @@ CREATE TABLE IF NOT EXISTS KhuyenMaiCombo (
 CREATE TABLE IF NOT EXISTS NhanVien (
     IDNhanVien VARCHAR(20) PRIMARY KEY,
     TenNhanVien VARCHAR(50) NOT NULL,
-    ngaySinh DATE,
-    soDienThoai VARCHAR(20),
-    email VARCHAR(255),
-    ngayVaoLam DATE,
-    chucVu VARCHAR(50),
-    luong DECIMAL(10,2),
-    diaChi VARCHAR(500),
-    anhDaiDien BLOB
+    SDT VARCHAR(20),
+    Mail VARCHAR(255),
+    NgayVaoLam DATE,
+    ViTri VARCHAR(50),
+    Luong DECIMAL(10,2)
+
 );
 
 -- Create TaiKhoan table
 CREATE TABLE IF NOT EXISTS TaiKhoan (
     idTaiKhoan VARCHAR(20) PRIMARY KEY,
     idNhanVien VARCHAR(20) NOT NULL,
+    anhDaiDien BLOB,
     idNhomQuyen VARCHAR(20) NOT NULL,
     matKhau VARCHAR(50) NOT NULL,
     FOREIGN KEY (idNhomQuyen) REFERENCES NhomQuyen(idNhomQuyen),
@@ -163,12 +168,10 @@ CREATE TABLE IF NOT EXISTS HoaDonXuat (
 CREATE TABLE IF NOT EXISTS ChiTietHoaDonXuat (
     idChiTietHoaDonXuat VARCHAR(20) PRIMARY KEY,
     idHoaDonXuat VARCHAR(20) NOT NULL,
-    idSanPham VARCHAR(20) NOT NULL,
-    soLuong INT NOT NULL,
-	donGia DECIMAL(12,2) NOT NULL, 
-    thanhTien DECIMAL(15,2) NOT NULL,
+    SN VARCHAR(50) NOT NULL,  
+	  donGia DECIMAL(12,2) NOT NULL, 
     FOREIGN KEY (idHoaDonXuat) REFERENCES HoaDonXuat(idHoaDonXuat),
-    FOREIGN KEY (idSanPham) REFERENCES SanPham(idSanPham)
+    FOREIGN KEY (SN) REFERENCES ChiTietSP(SerialNumber)
 );
 
 -- Create HoaDonNhap table
@@ -187,12 +190,12 @@ CREATE TABLE IF NOT EXISTS HoaDonNhap (
 
 CREATE TABLE IF NOT EXISTS ChiTietDonNhap (
     idDonHang INT,
-    idSanPham VARCHAR(20),
-    soLuong INT NOT NULL,
+    SN VARCHAR(50) NOT NULL,  
     donGia DECIMAL(12,2) NOT NULL, -- Đơn giá tại thời điểm mua
     thanhTien DECIMAL(15,2) NOT NULL, 
-    PRIMARY KEY (idDonHang, idSanPham),
-    FOREIGN KEY (idSanPham) REFERENCES SanPham(idSanPham)
+    PRIMARY KEY (idDonHang,SN),
+    FOREIGN KEY (SN) REFERENCES ChiTietSP(SerialNumber)
+
 );
 
 
@@ -445,4 +448,5 @@ VALUES
     ('PC005', 'CPU', 'SP005', 0),  -- AMD Ryzen 9 5950X
     ('PC005', 'RAM', 'SP014', 0),  -- G.Skill Ripjaws 64GB
     ('PC005', 'GPU', 'SP010', 0);  -- NVIDIA GeForce RTX 3090
+
 

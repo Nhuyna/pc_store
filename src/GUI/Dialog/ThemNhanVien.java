@@ -35,7 +35,7 @@ public void FormThemNv(String formname, String textButton, Employee nhanvien) {
     gbc.weightx = 1;
 
     // Cập nhật mảng labels, bỏ "Giới tính"
-    String[] labels = {"Họ và Tên:", "Email:", "Chức vụ:", "Số điện thoại:", "Ngày sinh:"};
+    String[] labels = {"Họ và Tên:", "Email:", "Chức vụ:", "Số điện thoại:", "Ngày vào làm:"};
 
     // Các trường nhập
     txtName = new JTextField(18);
@@ -88,8 +88,13 @@ public void FormThemNv(String formname, String textButton, Employee nhanvien) {
     gbc.gridwidth = 2;
     gbc.anchor = GridBagConstraints.CENTER;
     dialog.add(btnSave, gbc);
+if (nhanvien==null){
+    btnSave.addActionListener(e -> saveEmployee(dialog,false));  // Truyền thêm nhanvien nếu cần để cập nhật
+}
+else{
+    btnSave.addActionListener(e -> saveEmployee(dialog,true)); 
+}
 
-    btnSave.addActionListener(e -> saveEmployee(dialog,true));  // Truyền thêm nhanvien nếu cần để cập nhật
     dialog.setVisible(true);
 }
 
@@ -115,7 +120,7 @@ private void saveEmployee(JDialog dialog, boolean capnhat) {
         if (capnhat) {
             // Cập nhật nhân viên nếu capnhat là true
             Employee updatedEmployee = new Employee(
-                employeePanel.getSelectedEmployeeId(),  // Dùng ID hiện tại của nhân viên để cập nhật
+                employeePanel.getSelectedEmployeeId(), 
                 name, 
                 position, 
                 phone, 

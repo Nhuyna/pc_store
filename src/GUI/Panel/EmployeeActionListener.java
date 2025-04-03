@@ -24,9 +24,9 @@ public class EmployeeActionListener implements ActionListener {
                 break;
             case "Sửa":
    
-            int id = panel.getSelectedEmployeeId();
+            String id = panel.getSelectedEmployeeId();
             // System.out.println("id nè"+ id);
-            if (id != -1) {
+            if (id != "-1") {
                 panel.openEditEmployeeDialog(id);
             } else {
                 JOptionPane.showMessageDialog(panel, "Vui lòng chọn nhân viên cần chỉnh sửa!", "Thông báo", JOptionPane.WARNING_MESSAGE);

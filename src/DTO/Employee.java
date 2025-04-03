@@ -3,7 +3,7 @@ package DTO;
 import java.time.LocalDate;
 
 public class Employee {
-    private int id;
+    private String id;
     private String name;
     private String position;      // Chức vụ
     private String phoneNumber;   // Số điện thoại
@@ -11,7 +11,7 @@ public class Employee {
     private LocalDate dateOfJoining;  // Ngày vào làm
     private String homeAddress;       // Địa chỉ nhà
 
-    public Employee(int id, String name, String position, 
+    public Employee(String id, String name, String position, 
                     String phoneNumber, String email, LocalDate dateOfJoining) {
         this.id = id;
         this.name = name;
@@ -34,10 +34,10 @@ public class Employee {
 
 }
     // Getters & Setters
-    public int getId() {
+    public String getId() {
         return id;
     }
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
     
