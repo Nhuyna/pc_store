@@ -1,5 +1,6 @@
 package GUI.Panel;
 
+import BUS.EmployeeBUS;
 import DAO.EmployeeDAO;
 import DTO.Employee;
 import GUI.Components.MenuChucNang;
@@ -12,13 +13,15 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 
-import BUS.EmployeeBUS;
-
 public class EmployeePanel extends JPanel {
     private JTable employeeTable;
     private DefaultTableModel tableModel;
+    private List<Employee> employees;
+    private EmployeeBUS employeeBUS;
+    private int selectedEmployeeId = -1; 
 
     public EmployeePanel() {
+        this.employeeBUS = new EmployeeBUS(new EmployeeDAO());
         initComponent();
     }
 
@@ -38,9 +41,7 @@ public class EmployeePanel extends JPanel {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBackground(Color.WHITE);
 
-        EmployeeDAO dao = new EmployeeDAO();
-        List<Employee> employees = dao.getAllEmployees();
-
+        employees = employeeBUS.getAllEmployees();
 
         // Tiêu đề cột
         String[] columnNames = {"ID", "Họ Tên", "Chức Vụ", "Lương", "Số Điện Thoại", "Email", "Ngày Vào Làm", "Địa Chỉ"};
@@ -63,12 +64,7 @@ public class EmployeePanel extends JPanel {
         centerRenderer.setHorizontalAlignment(JLabel.CENTER);
 
         // Đổ dữ liệu vào bảng
-        for (Employee emp : employees) {
-            tableModel.addRow(new Object[]{
-                emp.getId(), emp.getName(), emp.getPosition(), emp.getSalary(),
-                emp.getPhoneNumber(), emp.getEmail(), emp.getDateOfJoining(), emp.getHomeAddress()
-            });
-        }
+        loadEmployeeTable();
 
         // Áp dụng căn giữa cho tất cả các cột
         for (int i = 0; i < employeeTable.getColumnCount(); i++) {
@@ -83,6 +79,8 @@ public class EmployeePanel extends JPanel {
 
         // Đưa bảng vào JScrollPane
         JScrollPane scrollPane = new JScrollPane(employeeTable);
+        employeeTable.setPreferredScrollableViewportSize(new Dimension(800, 300));
+
         panel.add(scrollPane, BorderLayout.CENTER);
 
         return panel;
@@ -117,15 +115,15 @@ public class EmployeePanel extends JPanel {
     }
 
     public void openAddEmployeeDialog() {
-        EmployeeBUS employeeBUS = new EmployeeBUS(new EmployeeDAO());
-        ThemNhanVien nvmoi = new ThemNhanVien(employeeBUS);
-        nvmoi.FormThemNv("Thêm nhân viên","Thêm");
+        ThemNhanVien nvmoi = new ThemNhanVien(employeeBUS, this);
+        nvmoi.FormThemNv("Thêm nhân viên","Thêm",null);
     }
 
-    public void openEditEmployeeDialog() {
-        EmployeeBUS employeeBUS = new EmployeeBUS(new EmployeeDAO());
-        ThemNhanVien nvmoi = new ThemNhanVien(employeeBUS);
-        nvmoi.FormThemNv("Chỉnh sửa thông tin nhân viên","Cập nhật");
+    public void openEditEmployeeDialog(int id) {
+        ThemNhanVien nvmoi = new ThemNhanVien(employeeBUS, this);
+        EmployeeDAO employeeDAO = new EmployeeDAO();
+        Employee employee = employeeDAO.getEmployeeById(id);
+        nvmoi.FormThemNv("Chỉnh sửa thông tin nhân viên","Cập nhật",employee);
     }
 
     private void printSelectedEmployee(int selectedRow) {
@@ -133,21 +131,17 @@ public class EmployeePanel extends JPanel {
         String name = (String) tableModel.getValueAt(selectedRow, 1);
         String position = (String) tableModel.getValueAt(selectedRow, 2);
         
-        // 🔹 Sửa lỗi ép kiểu salary
         Object salaryObj = tableModel.getValueAt(selectedRow, 3);
         double salary = salaryObj instanceof Number ? ((Number) salaryObj).doubleValue() : 0;
 
         String phone = (String) tableModel.getValueAt(selectedRow, 4);
         String email = (String) tableModel.getValueAt(selectedRow, 5);
 
-        // 🔹 Sửa lỗi lấy ngày
         Object dateObj = tableModel.getValueAt(selectedRow, 6);
         String dateOfJoining = dateObj != null ? dateObj.toString() : "N/A";
 
-        // 🔹 Thêm lại địa chỉ
         String address = (String) tableModel.getValueAt(selectedRow, 7);
 
-        // In thông tin nhân viên được chọn
         System.out.println("ID: " + id);
         System.out.println("Họ tên: " + name);
         System.out.println("Chức vụ: " + position);
@@ -158,22 +152,35 @@ public class EmployeePanel extends JPanel {
         System.out.println("Địa chỉ: " + address);
     }
 
-    private int addTableSelectionListener() {
-        final int[] selectedId = {-1}; // Dùng mảng để lưu giá trị có thể thay đổi được
-    
+
+
+    private void addTableSelectionListener() {
         employeeTable.getSelectionModel().addListSelectionListener(e -> {
             if (!e.getValueIsAdjusting()) {
                 int selectedRow = employeeTable.getSelectedRow();
-                if (selectedRow != -1) {
-                    selectedId[0] = (int) tableModel.getValueAt(selectedRow, 0);
-                    System.out.println(selectedId[0]);
+                if (selectedRow != -1) {                    selectedEmployeeId = (int) tableModel.getValueAt(selectedRow, 0);
                 }
             }
         });
-    
-        return selectedId[0]; // Lưu ý: giá trị này sẽ luôn là -1 ban đầu
     }
     
-
-
+    // Trả về ID của nhân viên đã chọn
+    public int getSelectedEmployeeId() {
+        return selectedEmployeeId;
+    }
+    
+    public void loadEmployeeTable() {
+        employees = employeeBUS.getAllEmployees();
+    
+        SwingUtilities.invokeLater(() -> {
+            tableModel.setRowCount(0);
+            for (Employee emp : employees) {
+                tableModel.addRow(new Object[]{
+                    emp.getId(), emp.getName(), emp.getPosition(),
+                    emp.getPhoneNumber(), emp.getEmail(), emp.getDateOfJoining(), emp.getHomeAddress()
+                });
+            }
+            tableModel.fireTableDataChanged();
+        });
+    }
 }

@@ -34,7 +34,7 @@ public class EmployeeDAO {
                 LocalDate dateOfJoining = rs.getDate("NgayVaoLam").toLocalDate();
                 
                 // Lấy thông tin địa chỉ từ các cột riêng lẻ và kết hợp lại
-                Employee emp = new Employee(id, name, position, salary, phoneNumber, email, dateOfJoining);
+                Employee emp = new Employee(id, name, position,  phoneNumber, email, dateOfJoining);
                 employees.add(emp);
             }
         } catch (SQLException e) {
@@ -42,20 +42,45 @@ public class EmployeeDAO {
         }
         return employees;
     }
+    public Employee getEmployeeById(int id) {
+        Employee employee = null;
+        String sql = "SELECT * FROM nhanvien WHERE IDNhanVien = ?"; // Truy vấn theo ID nhân viên
+        
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, id);  // Đặt giá trị ID cho câu lệnh SQL
+            
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    // Lấy thông tin nhân viên từ kết quả truy vấn
+                    String name = rs.getString("TenNhanVien");
+                    String position = rs.getString("ViTri");
+                    double salary = rs.getDouble("Luong");
+                    String phoneNumber = rs.getString("SDT");
+                    String email = rs.getString("Mail");
+                    LocalDate dateOfJoining = rs.getDate("NgayVaoLam").toLocalDate();
+                    
+                    // Tạo đối tượng Employee từ dữ liệu truy vấn
+                    employee = new Employee(id, name, position,  phoneNumber, email, dateOfJoining);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        
+        return employee; 
+    }
     
     // Thêm nhân viên
     public boolean addEmployee(Employee emp) {
-        // Kiểm tra xem homeAddress có tồn tại trong Employee hay không
-        String sql = "INSERT INTO nhanvien (TenNhanVien, ViTri, Luong, SDT, Mail, NgayVaoLam) VALUES (?, ?, ?, ?, ?, ?)";
+        // Câu lệnh SQL để thêm nhân viên, loại bỏ trường "Lương"
+        String sql = "INSERT INTO nhanvien (TenNhanVien, ViTri, SDT, Mail, NgayVaoLam) VALUES (?, ?, ?, ?, ?)";
         
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, emp.getName());               // TenNhanVien
             ps.setString(2, emp.getPosition());           // ViTri
-            ps.setDouble(3, emp.getSalary());             // Luong
-            ps.setString(4, emp.getPhoneNumber());        // SDT
-            ps.setString(5, emp.getEmail());              // Mail
-            ps.setDate(6, Date.valueOf(emp.getDateOfJoining())); // NgayVaoLam
-
+            ps.setString(3, emp.getPhoneNumber());        // SDT
+            ps.setString(4, emp.getEmail());              // Mail
+            ps.setDate(5, Date.valueOf(emp.getDateOfJoining())); // NgayVaoLam
     
             // Thực thi câu lệnh và kiểm tra kết quả
             return ps.executeUpdate() > 0;
@@ -68,18 +93,18 @@ public class EmployeeDAO {
     }
     
     public boolean updateEmployee(Employee emp) {
+        System.out.println("Tới đây ời nè");
         // Câu lệnh SQL để cập nhật thông tin nhân viên trong bảng nhanvien
-        String sql = "UPDATE nhanvien SET TenNhanVien = ?, ViTri = ?, Luong = ?, SDT = ?, Mail = ?, NgayVaoLam = ? WHERE id = ?";
-    
+        String sql = "UPDATE nhanvien SET TenNhanVien = ?, ViTri = ?, SDT = ?, Mail = ?, NgayVaoLam = ? WHERE IDNhanVien = ?";
+        
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             // Thiết lập các tham số của câu lệnh SQL từ đối tượng Employee
             ps.setString(1, emp.getName());               // TenNhanVien
             ps.setString(2, emp.getPosition());           // ViTri
-            ps.setDouble(3, emp.getSalary());             // Luong
-            ps.setString(4, emp.getPhoneNumber());        // SDT
-            ps.setString(5, emp.getEmail());              // Mail
-            ps.setDate(6, Date.valueOf(emp.getDateOfJoining())); // NgayVaoLam
-            ps.setInt(7, emp.getId());                    // id của nhân viên cần sửa
+            ps.setString(3, emp.getPhoneNumber());        // SDT
+            ps.setString(4, emp.getEmail());              // Mail
+            ps.setDate(5, Date.valueOf(emp.getDateOfJoining())); // NgayVaoLam
+            ps.setInt(6, emp.getId());                    // id của nhân viên cần sửa
     
             // Thực thi câu lệnh và kiểm tra kết quả
             return ps.executeUpdate() > 0;

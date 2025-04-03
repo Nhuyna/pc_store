@@ -3,6 +3,8 @@ package GUI.Panel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.JOptionPane;
+
 public class EmployeeActionListener implements ActionListener {
     private EmployeePanel panel;
 
@@ -21,10 +23,18 @@ public class EmployeeActionListener implements ActionListener {
                 panel.openAddEmployeeDialog();
                 break;
             case "Sửa":
-            // Kiem tra xem ng dung co dang click thog tin nao kh
+   
+            int id = panel.getSelectedEmployeeId();
+            // System.out.println("id nè"+ id);
+            if (id != -1) {
+                panel.openEditEmployeeDialog(id);
+            } else {
+                JOptionPane.showMessageDialog(panel, "Vui lòng chọn nhân viên cần chỉnh sửa!", "Thông báo", JOptionPane.WARNING_MESSAGE);
+            }
+            break;
+
             
-                panel.openEditEmployeeDialog();
-                break;
+    
             case "Xóa":
                 System.out.println("XOá");
                 break;
