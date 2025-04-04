@@ -12,7 +12,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.TitledBorder;
 
-import GUI.Panel.EmployeeActionListener;
+import GUI.ActionListener.EmployeeActionListener;
 import GUI.Panel.EmployeePanel;
 
 

@@ -12,110 +12,122 @@ import java.util.Date;
 
 public class ThemNhanVien {
     private JTextField txtName, txtEmail, txtPosition, txtPhone, txtSalary;
-    private JComboBox<String> cbGender;
     private JDateChooser dateChooser;
     private EmployeeBUS employeeBUS;
     private EmployeePanel employeePanel;
 
    public ThemNhanVien(EmployeeBUS bus, EmployeePanel employeePanel) {
-    this.employeeBUS = bus;
-    this.employeePanel = employeePanel;
-}
+        this.employeeBUS = bus;
+        this.employeePanel = employeePanel;
+    }
 
-public void FormThemNv(String formname, String textButton, Employee nhanvien) {
-    JDialog dialog = new JDialog((Frame) null, formname, true);
-    dialog.setSize(520, 500);  // Điều chỉnh kích thước dialog sau khi bỏ "Giới tính"
-    dialog.setLayout(new GridBagLayout());
-    dialog.setLocationRelativeTo(null);
-    dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+    public void FormThemNv(String formname, String textButton, Employee nhanvien) {
+        JDialog dialog = new JDialog((Frame) null, formname, true);
+        dialog.setSize(520, 550);  // Điều chỉnh kích thước dialog
+        dialog.setLayout(new GridBagLayout());
+        dialog.setLocationRelativeTo(null);
+        dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 
-    GridBagConstraints gbc = new GridBagConstraints();
-    gbc.insets = new Insets(8, 10, 8, 10);
-    gbc.fill = GridBagConstraints.HORIZONTAL;
-    gbc.weightx = 1;
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(8, 10, 8, 10);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.weightx = 1;
 
-    // Cập nhật mảng labels, bỏ "Giới tính"
-    String[] labels = {"Họ và Tên:", "Email:", "Chức vụ:", "Số điện thoại:", "Ngày vào làm:"};
+        // Cập nhật mảng labels, thêm "Lương"
+        String[] labels = {"Họ và Tên:", "Email:", "Chức vụ:", "Số điện thoại:", "Ngày vào làm:", "Lương:"};
 
-    // Các trường nhập
-    txtName = new JTextField(18);
-    txtEmail = new JTextField(18);
-    txtPosition = new JTextField(18);
-    txtPhone = new JTextField(18);
-    dateChooser = new JDateChooser();
-    dateChooser.setDateFormatString("yyyy/MM/dd");  // Định dạng ngày
+        // Các trường nhập
+        txtName = new JTextField(18);
+        txtEmail = new JTextField(18);
+        txtPosition = new JTextField(18);
+        txtPhone = new JTextField(18);
+        dateChooser = new JDateChooser();
+        dateChooser.setDateFormatString("yyyy/MM/dd");  // Định dạng ngày
+        txtSalary = new JTextField(18); // Trường nhập lương
 
-    JComponent[] components = {txtName, txtEmail, txtPosition, txtPhone, dateChooser};
-    
-    // Thêm các trường vào dialog
-    for (int i = 0; i < labels.length; i++) {
-        gbc.gridx = 0;
-        gbc.gridy = i;
-        gbc.anchor = GridBagConstraints.LINE_END;
-        JLabel label = new JLabel(labels[i]);
-        label.setFont(new Font("Arial", Font.BOLD, 13));
-        dialog.add(label, gbc);
-    
-        gbc.gridx = 1;
-        gbc.anchor = GridBagConstraints.LINE_START;
-        if (components[i] instanceof JTextField) {
-            ((JTextField) components[i]).setPreferredSize(new Dimension(200, 30));
-            ((JTextField) components[i]).setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
-        } else if (components[i] instanceof JDateChooser) {
-            components[i].setPreferredSize(new Dimension(210, 30));
+        JComponent[] components = {txtName, txtEmail, txtPosition, txtPhone, dateChooser, txtSalary};
+
+        // Thêm các trường vào dialog
+        for (int i = 0; i < labels.length; i++) {
+            gbc.gridx = 0;
+            gbc.gridy = i;
+            gbc.anchor = GridBagConstraints.LINE_END;
+            JLabel label = new JLabel(labels[i]);
+            label.setFont(new Font("Arial", Font.BOLD, 13));
+            dialog.add(label, gbc);
+
+            gbc.gridx = 1;
+            gbc.anchor = GridBagConstraints.LINE_START;
+            if (components[i] instanceof JTextField) {
+                ((JTextField) components[i]).setPreferredSize(new Dimension(200, 30));
+                ((JTextField) components[i]).setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
+            } else if (components[i] instanceof JDateChooser) {
+                components[i].setPreferredSize(new Dimension(210, 30));
+            }
+            dialog.add(components[i], gbc);
         }
-        dialog.add(components[i], gbc);
-    }
-    
-    // Nếu nhanvien khác null, điền thông tin vào các trường nhập
-    if (nhanvien != null) {
-        txtName.setText(nhanvien.getName());
-        txtEmail.setText(nhanvien.getEmail());
-        txtPosition.setText(nhanvien.getPosition());
-        txtPhone.setText(nhanvien.getPhoneNumber());
-        dateChooser.setDate(java.sql.Date.valueOf(nhanvien.getDateOfJoining()));
-    }
 
-    JButton btnSave = new JButton(textButton);
-    btnSave.setFont(new Font("Arial", Font.BOLD, 14));
-    btnSave.setBackground(new Color(50, 150, 250));
-    btnSave.setForeground(Color.WHITE);
-    btnSave.setFocusPainted(false);
-    btnSave.setPreferredSize(new Dimension(120, 35));
+        // Nếu nhanvien khác null, điền thông tin vào các trường nhập
+        if (nhanvien != null) {
+            txtName.setText(nhanvien.getName());
+            txtEmail.setText(nhanvien.getEmail());
+            txtPosition.setText(nhanvien.getPosition());
+            txtPhone.setText(nhanvien.getPhoneNumber());
+            dateChooser.setDate(java.sql.Date.valueOf(nhanvien.getDateOfJoining()));
+            txtSalary.setText(String.valueOf(nhanvien.getLuong())); // Thêm lương
+        }
 
-    gbc.gridx = 0;
-    gbc.gridy = labels.length;
-    gbc.gridwidth = 2;
-    gbc.anchor = GridBagConstraints.CENTER;
-    dialog.add(btnSave, gbc);
-if (nhanvien==null){
-    btnSave.addActionListener(e -> saveEmployee(dialog,false));  // Truyền thêm nhanvien nếu cần để cập nhật
-}
-else{
-    btnSave.addActionListener(e -> saveEmployee(dialog,true)); 
-}
+        JButton btnSave = new JButton(textButton);
+        btnSave.setFont(new Font("Arial", Font.BOLD, 14));
+        btnSave.setBackground(new Color(50, 150, 250));
+        btnSave.setForeground(Color.WHITE);
+        btnSave.setFocusPainted(false);
+        btnSave.setPreferredSize(new Dimension(120, 35));
 
-    dialog.setVisible(true);
-}
+        gbc.gridx = 0;
+        gbc.gridy = labels.length;
+        gbc.gridwidth = 2;
+        gbc.anchor = GridBagConstraints.CENTER;
+        dialog.add(btnSave, gbc);
 
-private void saveEmployee(JDialog dialog, boolean capnhat) {
-    String name = txtName.getText();
-    String email = txtEmail.getText();
-    String position = txtPosition.getText();
-    String phone = txtPhone.getText();
+        if (nhanvien == null) {
+            btnSave.addActionListener(e -> saveEmployee(dialog, false));
+        } else {
+            btnSave.addActionListener(e -> saveEmployee(dialog, true));
+        }
 
-    // Kiểm tra ngày
-    Date date = dateChooser.getDate();
-    System.err.println(date);
-    LocalDate dateOfJoining = null;
-    if (date != null) {
-        dateOfJoining = date.toInstant().atZone(java.time.ZoneId.systemDefault()).toLocalDate();
+        dialog.setVisible(true);
     }
 
-    // Kiểm tra các trường nhập liệu
-    if (name.isEmpty() || email.isEmpty() || position.isEmpty() || phone.isEmpty()) {
-        JOptionPane.showMessageDialog(dialog, "Vui lòng nhập đầy đủ thông tin!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-    } else {
+    private void saveEmployee(JDialog dialog, boolean capnhat) {
+        String name = txtName.getText();
+        String email = txtEmail.getText();
+        String position = txtPosition.getText();
+        String phone = txtPhone.getText();
+        String salaryText = txtSalary.getText();
+
+        // Kiểm tra ngày
+        Date date = dateChooser.getDate();
+        LocalDate dateOfJoining = null;
+        if (date != null) {
+            dateOfJoining = date.toInstant().atZone(java.time.ZoneId.systemDefault()).toLocalDate();
+        }
+
+        // Kiểm tra dữ liệu nhập
+        if (name.isEmpty() || email.isEmpty() || position.isEmpty() || phone.isEmpty() || salaryText.isEmpty()) {
+            JOptionPane.showMessageDialog(dialog, "Vui lòng nhập đầy đủ thông tin!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Kiểm tra lương có phải số hợp lệ không
+        double salary;
+        try {
+            salary = Double.parseDouble(salaryText);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(dialog, "Lương phải là một số hợp lệ!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
         boolean success;
         if (capnhat) {
             // Cập nhật nhân viên nếu capnhat là true
@@ -125,7 +137,8 @@ private void saveEmployee(JDialog dialog, boolean capnhat) {
                 position, 
                 phone, 
                 email, 
-                dateOfJoining
+                dateOfJoining,
+                salary
             );
             success = employeeBUS.updateEmployee(updatedEmployee);
         } else {
@@ -135,7 +148,8 @@ private void saveEmployee(JDialog dialog, boolean capnhat) {
                 position, 
                 phone, 
                 email, 
-                dateOfJoining
+                dateOfJoining,
+                salary
             );
             success = employeeBUS.addEmployee(newEmployee);
         }
@@ -154,12 +168,5 @@ private void saveEmployee(JDialog dialog, boolean capnhat) {
             String errorMessage = capnhat ? "Lỗi khi cập nhật nhân viên!" : "Lỗi khi thêm nhân viên!";
             JOptionPane.showMessageDialog(dialog, errorMessage, "Lỗi", JOptionPane.ERROR_MESSAGE);
         }
-    }
-}
-
-
-
-    public void openEditEmployeeDialog(){
-
     }
 }

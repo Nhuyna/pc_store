@@ -8,7 +8,8 @@ CREATE TABLE IF NOT EXISTS ChucNang (
 
 CREATE TABLE IF NOT EXISTS NhomQuyen (
     idNhomQuyen VARCHAR(20) PRIMARY KEY,
-    tenNhomQuyen VARCHAR(50) NOT NULL
+    tenNhomQuyen VARCHAR(50) NOT NULL,
+    trangThai INT DEFAULT 1
 );
 
 CREATE TABLE IF NOT EXISTS ChiTietQuyen (
@@ -25,6 +26,7 @@ CREATE TABLE IF NOT EXISTS DanhMuc (
     idDanhMuc VARCHAR(20) PRIMARY KEY,
     tenDanhMuc VARCHAR(50) NOT NULL,
     idDanhMucCha VARCHAR(20),  -- Thêm kiểu dữ liệu cho idDanhMucCha
+        trangThai INT DEFAULT 1,
     FOREIGN KEY (idDanhMucCha) REFERENCES DanhMuc(idDanhMuc) -- Khóa ngoại tham chiếu chính nó
 );
 
@@ -32,6 +34,7 @@ CREATE TABLE IF NOT EXISTS ThuongHieu (
     idThuongHieu VARCHAR(20) PRIMARY KEY,
     tenThuongHieu VARCHAR(50) NOT NULL,
     idDanhMuc VARCHAR(20),
+    trangThai INT DEFAULT 1,
     CONSTRAINT fk_thuonghieu_danhmuc FOREIGN KEY (idDanhMuc) REFERENCES DanhMuc(idDanhMuc)
 );
 
@@ -42,7 +45,8 @@ CREATE TABLE IF NOT EXISTS NhaCungCap (
     tenNhaCungCap VARCHAR(255) NOT NULL,
     diaChi VARCHAR(500),
     soDienThoai VARCHAR(20),
-    email VARCHAR(255)
+    email VARCHAR(255),
+    trangThai INT DEFAULT 1
 );
 
 -- Create SanPham table
@@ -51,9 +55,10 @@ CREATE TABLE IF NOT EXISTS SanPham (
     idDanhMuc VARCHAR(20) NOT NULL,
     tenSanPham VARCHAR(255) NOT NULL,
     idThuongHieu VARCHAR(20) NOT NULL,
-		Gia DECIMAL(12,2) NOT NULL,
+	Gia DECIMAL(12,2) NOT NULL,
     moTaSanPham VARCHAR(1000),
     anhSanPham BLOB,
+    trangThai INT DEFAULT 1,
     FOREIGN KEY (idDanhMuc) REFERENCES DanhMuc(idDanhMuc),
     FOREIGN KEY (idThuongHieu) REFERENCES ThuongHieu(idThuongHieu)
 );
@@ -102,7 +107,8 @@ CREATE TABLE IF NOT EXISTS PhanLoaiSP (
 
 CREATE TABLE IF NOT EXISTS ChiTietSP (
     SerialNumber VARCHAR(50) PRIMARY KEY,  -- SerialNumber là khóa chính
-    idPhanLoai INT,                        -- Liên kết với PhanLoaiSP
+    idPhanLoai INT,            
+    trangThai INT DEFAULT 1   ,         -- Liên kết với PhanLoaiSP
     FOREIGN KEY (idPhanLoai) REFERENCES PhanLoaiSP(idPhanLoai) -- Khóa ngoại
 );
 
@@ -129,7 +135,8 @@ CREATE TABLE IF NOT EXISTS NhanVien (
     Mail VARCHAR(255),
     NgayVaoLam DATE,
     ViTri VARCHAR(50),
-    Luong DECIMAL(10,2)
+    Luong DECIMAL(10,2),
+    trangThai INT DEFAULT 1
 
 );
 
@@ -140,6 +147,7 @@ CREATE TABLE IF NOT EXISTS TaiKhoan (
     anhDaiDien BLOB,
     idNhomQuyen VARCHAR(20) NOT NULL,
     matKhau VARCHAR(50) NOT NULL,
+    trangThai INT DEFAULT 1,
     FOREIGN KEY (idNhomQuyen) REFERENCES NhomQuyen(idNhomQuyen),
     FOREIGN KEY (idNhanVien) REFERENCES NhanVien(idNhanVien)
 );
@@ -148,7 +156,8 @@ CREATE TABLE IF NOT EXISTS TaiKhoan (
 CREATE TABLE IF NOT EXISTS KhachHang (
     idKhachHang VARCHAR(20) PRIMARY KEY,
     tenKhachHang VARCHAR(50) NOT NULL,
-    soDienThoai VARCHAR(20) NOT NULL
+    soDienThoai VARCHAR(20) NOT NULL,
+    trangThai INT DEFAULT 1
 );
 
 -- Create HoaDonXuat table

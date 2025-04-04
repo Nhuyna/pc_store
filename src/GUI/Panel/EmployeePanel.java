@@ -44,12 +44,12 @@ public class EmployeePanel extends JPanel {
         employees = employeeBUS.getAllEmployees();
 
         // Tiêu đề cột
-        String[] columnNames = {"ID", "Họ Tên", "Chức Vụ", "Lương", "Số Điện Thoại", "Email", "Ngày Vào Làm", "Địa Chỉ"};
+        String[] columnNames = {"ID", "Họ Tên", "Chức Vụ", "Lương", "Số Điện Thoại", "Email", "Ngày Vào Làm","Trạng Thái"};
         tableModel = new DefaultTableModel(columnNames, 0);
         employeeTable = new JTable(tableModel) {
             @Override
             public boolean isCellEditable(int row, int column) {
-                return false;
+                return false; // Không cho phép chỉnh sửa ô trong bảng
             }
         };
 
@@ -125,6 +125,15 @@ public class EmployeePanel extends JPanel {
         Employee employee = employeeDAO.getEmployeeById(id);
         nvmoi.FormThemNv("Chỉnh sửa thông tin nhân viên","Cập nhật",employee);
     }
+    
+    public void openRemoveEmployeeDialog(String id) {
+        int confirm = JOptionPane.showConfirmDialog(this, "Bạn có chắc chắn muốn xóa nhân viên này không?", "Xác nhận", JOptionPane.YES_NO_OPTION);
+        if (confirm == JOptionPane.YES_OPTION) {
+            employeeBUS.deleteEmployee(id);
+            loadEmployeeTable();
+            JOptionPane.showMessageDialog(this, "Xóa nhân viên thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }
 
     private void printSelectedEmployee(int selectedRow) {
         int id = (int) tableModel.getValueAt(selectedRow, 0);
@@ -149,7 +158,7 @@ public class EmployeePanel extends JPanel {
         System.out.println("Số điện thoại: " + phone);
         System.out.println("Email: " + email);
         System.out.println("Ngày vào làm: " + dateOfJoining);
-        System.out.println("Địa chỉ: " + address);
+ 
     }
 
 
@@ -176,10 +185,14 @@ public class EmployeePanel extends JPanel {
         SwingUtilities.invokeLater(() -> {
             tableModel.setRowCount(0);
             for (Employee emp : employees) {
+
+    
                 tableModel.addRow(new Object[]{
                     emp.getId(), emp.getName(), emp.getPosition(),
-                    emp.getPhoneNumber(), emp.getEmail(), emp.getDateOfJoining(), emp.getHomeAddress()
+                  emp.getLuong(),  emp.getPhoneNumber(), emp.getEmail(), emp.getDateOfJoining()
                 });
+    
+
             }
             tableModel.fireTableDataChanged();
         });

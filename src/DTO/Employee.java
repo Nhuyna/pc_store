@@ -9,21 +9,35 @@ public class Employee {
     private String phoneNumber;   // Số điện thoại
     private String email;         // Email
     private LocalDate dateOfJoining;  // Ngày vào làm
-    private String homeAddress;       // Địa chỉ nhà
+    private double Luong;       // Địa chỉ nhà
+    private boolean trangThai;
 
     public Employee(String id, String name, String position, 
-                    String phoneNumber, String email, LocalDate dateOfJoining) {
+                    String phoneNumber, String email, LocalDate dateOfJoining,double Luong) {
         this.id = id;
         this.name = name;
         this.position = position;
         this.phoneNumber = phoneNumber;
         this.email = email;
         this.dateOfJoining = dateOfJoining;
+        this.Luong=Luong;
 
     }
+    public Employee(String id, String name, String position, 
+    String phoneNumber, String email, LocalDate dateOfJoining,double Luong,boolean trangThai) {
+        this.id = id;
+        this.name = name;
+        this.position = position;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+        this.dateOfJoining = dateOfJoining;
+        this.Luong=Luong;
+        this.trangThai=trangThai;
+            }
+    // Constructor không có ID (dùng khi thêm nhân viên mới)   
 
         public Employee( String name, String position, 
-        String phoneNumber, String email, LocalDate dateOfJoining) {
+        String phoneNumber, String email, LocalDate dateOfJoining,double Luong) {
 
     this.name = name;
     this.position = position;
@@ -31,6 +45,7 @@ public class Employee {
     this.phoneNumber = phoneNumber;
     this.email = email;
     this.dateOfJoining = dateOfJoining;
+    this.Luong=Luong;
 
 }
     // Getters & Setters
@@ -78,10 +93,16 @@ public class Employee {
         this.dateOfJoining = dateOfJoining;
     }
     
-    public String getHomeAddress() {
-        return homeAddress;
+    public Double getLuong() {
+        return Luong;
     }
-    public void setHomeAddress(String homeAddress) {
-        this.homeAddress = homeAddress;
+    public void setLuong(Double Luong) {
+        this.Luong = Luong;
+    }
+    public boolean getTrangThai() {
+        return trangThai;
+    }
+    public void setTrangThai(boolean trangThai) {
+        this.trangThai = trangThai;
     }
 }

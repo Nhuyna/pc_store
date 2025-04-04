@@ -42,7 +42,8 @@ public class EmployeeBUS {
             employee.getPosition(), 
             employee.getPhoneNumber(), 
             employee.getEmail(), 
-            date
+            date,
+            employee.getLuong()
         );
     
          System.out.println(newEmployee.getId());
@@ -61,13 +62,20 @@ public class EmployeeBUS {
     // Phương thức xóa nhân viên
 public boolean deleteEmployee(String id) {
  
-      System.out.println("hi");
-      return true;
+      return employeeDAO.deleteEmployee(id);
 }
 
     // Phương thức lấy danh sách nhân viên
     public List<Employee> getAllEmployees() {
-        return employeeDAO.getAllEmployees();
+        List<Employee> employees = employeeDAO.getAllEmployees();
+        List<Employee> activeEmployees = new ArrayList<>(); 
+        for (Employee emp: employees) {
+            if(emp.getTrangThai()== true){
+                activeEmployees.add(emp);
+            }
+
+        }
+        return activeEmployees;
     }
     
     public String generateUniqueId(List<Employee> employees) {
@@ -91,7 +99,7 @@ public boolean deleteEmployee(String id) {
             if (!exists){
                 return t;
             }
-        } while (true); // Lặp lại nếu ID đã tồn tại
+        } while (true); 
         
 
     }
