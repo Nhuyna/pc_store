@@ -11,6 +11,8 @@ import java.util.Map;
 import javax.swing.*;
 
 import GUI.Main;
+import GUI.Panel.CustomerPanel;
+// import GUI.Panel.CustomerPanel;
 import GUI.Panel.EmployeePanel;
 import GUI.Panel.Trangchu;
 import GUI.Components.MenuChucNang;
@@ -29,7 +31,7 @@ public class MenuLeft extends JPanel {
         {"Phiếu xuất"},
         {"Khách hàng"},
         {"Nhà cung cấp"},
-        {"Nhân viên", "Quản lí", "Bán hàng"},
+        {"Nhân viên"},
         {"Tài khoản"},
         {"Thống kê"},
         {"Phân quyền"},
@@ -106,13 +108,13 @@ public class MenuLeft extends JPanel {
             case "Nhân viên":
             mainFrame.setMainPanel(new EmployeePanel());
             break;
-            case "Quản lí":
+
             // case "Bán hàng":
             //     mainFrame.setMainPanel(new EmployeePanel());
             //     break;
-            // case "Khách hàng":
-            //     mainFrame.setMainPanel(new CustomerPanel());
-            //     break;
+            case "Khách hàng":
+                mainFrame.setMainPanel(new CustomerPanel());
+                break;
             // case "Thống kê":
             //     mainFrame.setMainPanel(new StatisticsPanel());
             //     break;

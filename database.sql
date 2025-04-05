@@ -154,17 +154,20 @@ CREATE TABLE IF NOT EXISTS TaiKhoan (
 
 -- Create KhachHang table
 CREATE TABLE IF NOT EXISTS KhachHang (
-    idKhachHang VARCHAR(20) PRIMARY KEY,
+    idKhachHang INT AUTO_INCREMENT PRIMARY KEY,
     tenKhachHang VARCHAR(50) NOT NULL,
     soDienThoai VARCHAR(20) NOT NULL,
+       Mail VARCHAR(255),
+           NgayThamGia DATE,
     trangThai INT DEFAULT 1
 );
+
 
 -- Create HoaDonXuat table
 CREATE TABLE IF NOT EXISTS HoaDonXuat (
     idHoaDonXuat VARCHAR(20) PRIMARY KEY,
     idNhanVien VARCHAR(20) NOT NULL,
-    idKhachHang VARCHAR(20) NOT NULL,
+    idKhachHang INT NOT NULL,
     ngayTao DATE NOT NULL,
     tongTien DECIMAL(17,2) NOT NULL,
     idKhuyenMai VARCHAR(20),

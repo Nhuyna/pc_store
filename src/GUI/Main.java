@@ -11,7 +11,7 @@ import GUI.Panel.Trangchu;
 public class Main extends JFrame {
 
     public JPanel MainContent;
-    Color MainColor = new Color(250, 250, 250);
+    Color MainColor = new Color(0xF0F0F0);
 
     private MenuLeft menuTaskbar;
 
@@ -28,7 +28,6 @@ public class Main extends JFrame {
         this.setTitle("Hệ thống quản lý cửa hàng máy tính");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     
-        // Truyền `this` vào `MenuLeft`
         menuTaskbar = new MenuLeft(this);
 
         JScrollPane scrollPane = new JScrollPane(menuTaskbar);
@@ -42,7 +41,7 @@ public class Main extends JFrame {
         MainContent.setBackground(MainColor);
         this.add(MainContent, BorderLayout.CENTER);
     
-        setMainPanel(new Trangchu()); // Mặc định mở Trang chủ
+        setMainPanel(new Trangchu());
     
         this.setVisible(true);
     }

@@ -40,7 +40,7 @@ public class EmployeeActionListener implements ActionListener {
             case "Xóa":
             id = panel.getSelectedEmployeeId();
             // System.out.println("id nè"+ id);
-            if (id != "-1") {
+            if (id == "-1") {
                 JOptionPane.showMessageDialog(panel, "Vui lòng chọn nhân viên cần xoá!", "Thông báo", JOptionPane.WARNING_MESSAGE);
             }
                 break;

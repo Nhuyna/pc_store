@@ -16,7 +16,7 @@ public class MenuItem extends JButton {
         setPreferredSize(new Dimension(150, 40));
         setFocusPainted(false);
         setBorderPainted(false);
-        setBackground(new Color(230, 230, 230));
+        setBackground(Color.WHITE);
         setOpaque(true);
 
         if (hasSubmenu) {
